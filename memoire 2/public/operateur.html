@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Robotic Vehicle Control Panel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link href="assets/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/all.min.css">
+  <link rel="stylesheet" href="assets/main.css">
+</head>
+
+<body>
+  <div class="container">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <img src="logo.png" href="operator.html" width="150" height="25">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+            <li class="nav-item">
+              <a class="nav-link ms-3" href="operateur.html#logs" style="color:white">Logs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="table.html" style="color:white">Demandes</a>
+            </li>
+
+          </ul>
+          <form class="d-flex" role="search"action="/logout" method="POST">
+            <button class="btn btn-danger">logout <i class="fas fa-arrow-right mx-1"></i></button>
+          </form>
+        </div>
+      </div>
+    </nav>
+    <div class="d-flex justify-content-between mt-2 ">
+      <div class="flex-1 w-100 p-2">
+        <h2>Hello From ROBOSITE !</h2>
+        <div class="d-flex justify-content-between mt-2">
+          <div class="row">
+            <div class="col-12 pt-3">
+              <h5>Connection status</h5>
+              <h6 id="connection" class="text-danger">Disconnected</h6>
+              <h5 class="mt-3">Robot address</h5>
+              <h6 class="text-purple">http://127.0.0.1:8000</h6>
+              <button id="cnct" class="btn btn-success"onclick="toggleConnection()"> Connect</button>
+              <button id="dc" class="btn btn-danger"> Disable client</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="flex-1 w-100">
+        <div class="row">
+          <div class="col">
+            <div class="card" style="background: transparent; border: none;">
+              <div class="card-body">
+                <h5 class="card-title text-center" style=" width: 100%;
+                height: auto;
+                max-height: 100%;
+                object-fit: contain;"style="color:white">Camera Stream</h5>
+                <div style=" max-width: 100%;
+                max-height: 100%;
+                overflow: hidden;" class="video-container bg-dark rounded">
+                  <video style="  
+                  width: 100%;
+                  height: auto;
+                  max-width: 100%;
+                  max-height: 400px;
+                  object-fit: contain;" id="cameraStream" autoplay></video>
+                </div>
+                <div class="mt-1 d-flex justify-content-between">
+                  <button class="button btn btn-dark" id="activateButton">Activate Camera</button>
+                  <button class="button btn btn-dark" id="deactivateButton">Deactivate Camera</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <hr>
+    <div class="d-flex mx-2 flex-row justify-content-between">
+      <div class="w-50 d-flex mx-2 flex-row justify-content-between">
+        <div class="w-50 px-4">
+          <label for="speed" id="speed-label"><b>Speed of Engine</b> </label>
+          <div class="d-flex">
+            <button class="button button--addOnLeft btn btn-light" id="decrease-speed">-</button>
+            <input class="form-control mx-2" id="speed" name="vitess du moteur" value="100" min="0" oninput="getval()">
+            <button class="button button--addOnRight btn btn-light" id="increase-speed">+</button>
+          </div>
+          <label for="distance" id="distance-label"><b>Distance of Obstacles</b></label>
+          <div class="d-flex">
+            <button class="button button--addOnLeft btn btn-light" id="decrease-distance">-</button>
+            <input class="form-control mx-2" id="distance" name="distance des obstacle" value="100" min="0"
+              oninput="getval()">
+            <button class="button button--addOnRight btn btn-light" id="increase-distance">+</button>
+          </div>
+          <label for="distance" id="timing-label"><b>Timing</b></label>
+          <div class="d-flex">
+            <button class="button button--addOnLeft btn btn-light" id="decrease-timing">-</button>
+            <input class="form-control mx-2" id="timing" name="distance des obstacle" value="100" min="0"
+              oninput="getval()">
+            <button class="button button--addOnRight btn btn-light" id="increase-timing">+</button>
+          </div>
+          <p class="mt-1 d-flex flex-row justify-content-center">
+            <button id="valider" class="button btn btn-success btn-lg text-white">Validate</button>
+          </p>
+        </div>
+        <div class="w-50 px-4 border-start border-secondary">
+          <br>
+          <div class="d-flex">
+            <button class="btn btn-danger" id="otb"> Open box</button>
+          </div>
+          <br>
+          <div class="d-flex">
+            <input oninput=getval() type="text" id="salle_n" name="salle_n" class="form-control me-2" style="width: 50px;">
+            <button class="btn btn-danger" id="rs"> Request service</button>
+          </div>
+          <br>
+          <div class="d-flex">
+            <button class="btn btn-danger" id="end"> Cancel service</button>
+          </div>
+        </div>
+      </div>
+      <div class="w-50 d-flex justify-content-center">
+        <div class="border border-5 rounded-circle d-flex justify-content-center align-items-center"
+          style="width: 220px;height: 220px;background: #ebe3e359;">
+          <div>
+            <div class="up-down-container d-flex justify-content-center">
+              <button id="forward" class="button btn btn-light btn-lg rounded-circle m-1"><i
+                  class="fa fa-arrow-up"></i></button>
+            </div>
+            <div class="left-right-container">
+              <button id="left" class="button btn btn-light btn-lg rounded-circle m-1"><i
+                  class="fa fa-arrow-left"></i></button>
+              <button id="stop" class="button btn btn-danger ">STOP</button>
+              <button id="right" class="button btn btn-light btn-lg rounded-circle m-1"><i
+                  class="fa fa-arrow-right"></i></button>
+            </div>
+            <div class="up-down-container d-flex justify-content-center">
+              <button id="backward" class="button btn btn-light btn-lg rounded-circle m-1"><i
+                  class="fa fa-arrow-down"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div id="logs" class="d-flex flex-col">
+      <div class="w-100">
+        <div class="col">
+          <div class="row">
+            <div class="card" style="background: transparent;border: none;">
+              <div class="d-flex mx-2 flex-row justify-content-between">
+                <div class="card-text scrollable-div"
+                  style="width: 300px;min-height: 200px;max-height: 200px;overflow-y: scroll;border-radius: 10px;font-size: 10px;">
+                  <div id="respondArea" class="card-text terminal-logs p-2 m-0"
+                    style="background-color: black;color: greenyellow;">
+                    <p><span class="timestamp">[09:00:01]</span> Welcome to Robosite!</p>
+                    <p><span class="timestamp">[09:00:01]</span> this is the server log
+                    <p>
+                    <p><span class="timestamp">[09:00:01]</span> everything from the server will be shown here
+                    <p>
+                  </div>
+                </div>
+                <div class="card-text scrollable-div"
+                  style="width: 300px;min-height: 200px;max-height: 200px;overflow-y: scroll;border-radius: 10px;font-size: 10px;">
+                  <div id="respondArea" class="card-text terminal-logs p-2 m-0"
+                    style="background-color: black;color: greenyellow;">
+                    <p><span class="timestamp">[09:00:01]</span> Welcome to Robosite!</p>
+                    <p><span class="timestamp">[09:00:01]</span> this is the obstacle detection log
+                    <p>
+                  </div>
+                </div>
+                <div class="card-text scrollable-div"
+                  style="width: 300px; min-height: 200px;max-height: 200px;overflow-y: scroll;border-radius: 10px;font-size: 10px;">
+                  <div id="respondArea" class="card-text terminal-logs p-2 m-0"
+                    style="background-color: black;color: greenyellow;">
+                    <p><span class="timestamp">[09:00:01]</span> Welcome to Robosite!</p>
+                    <p><span class="timestamp">[09:00:01]</span> this is for the red radiation log
+                    <p>
+                    <p><span class="timestamp">[09:00:01]</span> everythin from the server will be shown here
+                    <p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br><br>
+  </div>
+  </div>
+
+
+
+  <script src="assets/bootstrap.bundle.min.js"></script>
+  <script src="assets/popper.min.js"></script>
+  <script src="assets/bootstrap.min.js"></script>
+
+
+  <script>
+    const socket = new WebSocket(`ws://${window.location.hostname}:8080`);
+    document.getElementById('forward').addEventListener('click', () => {
+      socket.send('f');
+    });
+    document.getElementById('backward').addEventListener('click', () => {
+      socket.send('b');
+    });
+    document.getElementById('left').addEventListener('click', () => {
+      socket.send('l');
+    });
+    document.getElementById('right').addEventListener('click', () => {
+      socket.send('r');
+    });
+    document.getElementById('stop').addEventListener('click', () => {
+      socket.send('s');
+    });
+    document.getElementById('cnct').addEventListener('click', () => {
+    
+      socket.send('c');
+    });
+    document.getElementById('dc').addEventListener('click', () => {
+      socket.send('disable the client');
+    });
+    const speedInput = document.getElementById("speed");
+    const increaseButton = document.getElementById("increase-speed");
+    const decreaseButton = document.getElementById("decrease-speed");
+    increaseButton.addEventListener("click", () => {
+      if (speedInput.value < 255) {
+        let newSpeed = parseInt(speedInput.value) + 1;
+        speedInput.value = newSpeed;
+        getval();
+      } else {
+        alert("max value is 255")
+      }
+    });
+
+    decreaseButton.addEventListener("click", () => {
+      if (speedInput.value > 1) {
+        let newSpeed = parseInt(speedInput.value) - 1;
+        speedInput.value = newSpeed;
+        getval();
+      } else { alert("value should not be less than 1") }
+    });
+    const distanceInput = document.getElementById("distance");
+    const increaseButtond = document.getElementById("increase-distance");
+    const decreaseButtond = document.getElementById("decrease-distance");
+    increaseButtond.addEventListener("click", () => {
+      let newdistance = parseInt(distanceInput.value) + 1;
+      distanceInput.value = newdistance;
+      getval();
+    });
+    decreaseButtond.addEventListener("click", () => {
+      if (distanceInput.value > 1) {
+        let newdistance = parseInt(distanceInput.value) - 1;
+        distanceInput.value = newdistance;
+        getval();
+      } else { alert("value should not be less than 1") }
+    });
+    const timingInput = document.getElementById("timing");
+    const increaseButtont = document.getElementById("increase-timing");
+    const decreaseButtont = document.getElementById("decrease-timing");
+    increaseButtont.addEventListener("click", () => {
+      let newtiming = parseInt(timingInput.value) + 1;
+      timingInput.value = newtiming;
+      getval();
+    });
+    decreaseButtont.addEventListener("click", () => {
+      if (timingInput.value > 1) {
+        let newtiming = parseInt(timingInput.value) - 1;
+        timingInput.value = newtiming;
+        getval();
+      } else { alert("value should not be less than 1") }
+    });
+    function getval() {
+      val1 = document.getElementById('speed').value;
+      val2 = document.getElementById('distance').value;
+      val3 = document.getElementById('timing').value;
+    }
+
+    document.getElementById('valider').addEventListener('click', () => {
+      socket.send("vitess du moyeur " + val1);
+      socket.send("distance des obstacles " + val2);
+      socket.send("timing " + val3);
+    })
+    const circle = document.getElementById("circle");
+    const responseArea = document.getElementById("respondArea");
+    const connection= document.getElementById("connection");
+    let status="disconnected";
+    const connectButton = document.getElementById("cnct");
+      var connectionStatus = document.getElementById("connection");
+    socket.addEventListener('message', function (event) {
+      const data = event.data;
+      const timestamp = new Date().toLocaleTimeString();
+      console.log(data);
+      if (data === "o") {
+        circle.style.backgroundColor = "red";
+      }
+      if(data==="connected"){
+status="connected";
+ connectButton.innerText = "Disconnect";
+    connectButton.classList.remove("btn-success");
+    connectButton.classList.add("btn-danger");
+    connectionStatus.innerText = "Connected";
+    connectionStatus.classList.remove("text-danger");
+    connectionStatus.classList.add("text-success");
+      }
+      responseArea.innerHTML += `<p><span class="timestamp">[${timestamp}]</span> ${data}</p>`;
+    })
+    document.addEventListener('DOMContentLoaded', () => {
+      const videoElement = document.getElementById('cameraStream');
+      const activateButton = document.getElementById('activateButton');
+      const deactivateButton = document.getElementById('deactivateButton');
+      let videoStream = null;
+
+      // Function to activate the camera
+      function activateCamera() {
+        // Request access to the camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then(stream => {
+            videoStream = stream;
+            // Attach the camera stream to the video element
+            videoElement.srcObject = stream;
+          })
+          .catch(error => {
+            console.error('Error accessing camera:', error);
+            alert('Error accessing camera');
+          });
+      }
+
+      // Function to deactivate the camera
+      function deactivateCamera() {
+        if (videoStream) {
+          videoStream.getTracks()[0].stop();
+          videoStream = null;
+          videoElement.srcObject = null;
+        }
+      }
+
+      // Activate button click event
+      activateButton.addEventListener('click', () => {
+        activateCamera();
+      });
+
+      // Deactivate button click event
+      deactivateButton.addEventListener('click', () => {
+        deactivateCamera();
+      });
+    });
+    function toggleConnection() {
+  var connectButton = document.getElementById("cnct");
+  var connectionStatus = document.getElementById("connection");
+socket.send("c");
+  if (connectButton.innerText === "Connect" && status === "connected") {
+    connectButton.innerText = "Disconnect";
+    connectButton.classList.remove("btn-success");
+    connectButton.classList.add("btn-danger");
+    connectionStatus.innerText = "Connected";
+    connectionStatus.classList.remove("text-danger");
+    connectionStatus.classList.add("text-success");
+  } else {
+    connectButton.innerText = "Connect";
+    connectButton.classList.remove("btn-danger");
+    connectButton.classList.add("btn-success");
+    connectionStatus.innerText = "Disconnected";
+    connectionStatus.classList.remove("text-success");
+    connectionStatus.classList.add("text-danger");
+     status = "disconnected";
+  }
+}
+
+  </script>
+</body>

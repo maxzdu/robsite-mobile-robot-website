@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Robotic Vehicle Control Panel</title>
+	<style>
+		body {
+  background-color: #F5F5F5;
+  margin: 0;
+  padding: 0;
+}
+element.style {
+    margin-top: 10px;
+  }
+input{
+  font-size: 1.2em;
+  padding: 10px;
+  display: inline-block;
+   text-align: center;
+  font-weight: bold;
+   transition: background-color 0.3s ease;
+}
+label{
+  text-align: center;
+  margin-left: 35%;
+
+}
+h2{
+  text-align: center
+}
+.up-down-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  padding-top: 50px;
+}
+
+.left-right-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding-top: 50px;
+  width: 500px;
+
+}
+
+.button {
+  display: inline-block;
+  padding: 20px;
+  margin: 10px;
+  border: solid;
+  border-radius: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color:rgb(22, 56, 45);
+  color: #FFFFFF;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.button:hover {
+  background-color: #5e1818;
+}
+
+.button:active {
+  background-color: #292929;
+}
+.float-container{
+  
+  display: flex;
+  flex-direction: row;
+}
+.container{
+  margin-top: 50%;
+  padding-top: 10px;
+}
+
+.container1{
+position: relative;
+top: 0%;
+float: right;
+justify-content: center;
+  align-items: center;
+}
+.config-style{
+  border-radius: 10px;
+  border-style:solid;
+  border-color: #292929;
+  float: left;
+  margin-bottom: 50%;
+}
+#forward {
+  background-color: #7A7A7A;
+}
+
+#backward {
+  background-color: #7A7A7A;
+}
+a{
+  padding: 10px;
+  background-color: #292929;
+  color: #F5F5F5;
+  text-decoration: none;
+}
+
+#left {
+  background-color: #7A7A7A;
+}
+
+#right {
+  background-color: #7A7A7A;
+}
+
+#forward:before {
+  content: "▲";
+  display: block;
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+#backward:before {
+  content: "▼";
+  display: block;
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+#left:before {
+  content: "◀";
+  display: block;
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+#right:before {
+  content: "▶";
+  display: block;
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+#form{
+position :relative;
+}
+#valider{
+  margin-left: 35%;
+  margin-right: 50%;
+}
+#circle {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background-color: rgb(6, 100, 22);
+        margin-left: auto;
+        margin-right: auto;
+        border: #080808;
+        border-style: groove;
+      }
+      #videoContainer {
+      width: 380px;
+      height: 360px;
+      background-color:#080808;
+    }
+</style>
+
+
+</head>
+<body>
+<div class="float-container">
+    <div style="display: flex; flex-direction:column; align-items: center;">
+      <button id="lf" class="button">line follower</button>
+      <button id="rs" class="button">Request  Rervice</button>
+    <div>
+        <input oninput=getval() type="text" id="salle_n" name="salle_n" placeholder="Room Number">
+      </div>
+        <button id="otb" class="button">Open The Box</button>
+        <button id="end" class="button">Service End</button>
+        
+      </div>
+<div>
+  <div id="circle"></div>
+  <div class="up-down-container">
+    <button id="forward" class="button"></button>
+  </div>
+  <div class="left-right-container">
+    <button id="left" class="button"></button>
+    <button id="stop" class="button">STOP</button>
+    <button id="right" class="button"></button>
+  </div>
+  <div class="up-down-container">
+    <button id="backward" class="button"></button>
+  </div>
+</div>
+  <div class="container1">
+    <h2>camera</h2>
+    <div id="videoContainer">
+    <video  id="cameraStream" autoplay ></video></div>
+    <br>
+    <button class="button"id="activateButton">Activate Camera</button>
+    <button class="button"id="deactivateButton">Deactivate Camera</button>
+ <div>
+  <h2>response of server</h2>
+  <textarea  id="responseArea" cols="40" rows="15"></textarea>
+  </div>
+  
+  </div>
+
+ 
+</div>
+  
+	<script>
+		const socket = new WebSocket(`ws://${window.location.hostname}:8080`);
+   
+		document.getElementById('forward').addEventListener('click', () => {
+			socket.send('f');
+		});
+        document.getElementById('backward').addEventListener('click', () => {
+			socket.send('b');
+		});
+		document.getElementById('left').addEventListener('click', () => {
+			socket.send('l');
+		});
+		document.getElementById('right').addEventListener('click', () => {
+			socket.send('r');
+		});
+		document.getElementById('stop').addEventListener('click', () => {
+			socket.send('s');
+		});
+    document.getElementById('otb').addEventListener('click',() => {
+			socket.send('open the box ');
+		});
+    document.getElementById('end').addEventListener('click',() => {
+			socket.send('end of service ');
+    document.getElementById('otb').disabled = true;
+		document.getElementById('end').disabled = true;
+		});
+    document.getElementById('lf').addEventListener('click',() => {
+			socket.send('line follower');
+		});
+    function getval(){
+   val = document.getElementById('salle_n').value.trim();
+  
+  } 
+  document.getElementById('otb').disabled = true;
+	document.getElementById('end').disabled = true;
+   var rs= document.getElementById('rs');
+   var inputArea=document.getElementById('salle_n')
+   inputArea.addEventListener('input', function() {
+    var val = inputArea.value.trim();
+    if (val=== '') {
+      rs.disabled = true;
+     
+    } else {
+      rs.disabled = false;
+    }
+  });
+    rs.onclick=function(){
+      var valu = document.getElementById('salle_n').value.trim();
+  if(valu !== ""){
+	socket.send('rqeuest service to room '+valu);
+  document.getElementById('otb').disabled = false;
+	document.getElementById('end').disabled = false;
+} else {
+  
+alert("Enter The Room's Number");}}
+    
+      socket.addEventListener('message', function (event) {
+    const data = event.data;
+    console.log( data);
+    if (data === "o") {
+        circle.style.backgroundColor = "red";
+      }
+      if(data=="disable the client"){
+        document.getElementById('forward').disabled = true;
+        document.getElementById('backward').disabled = true;
+        document.getElementById('left').disabled = true;
+        document.getElementById('right').disabled = true;
+        document.getElementById('stop').disabled = true;
+        document.getElementById('rs').disabled = true;
+        document.getElementById('otb').disabled = true;
+        document.getElementById('end').disabled = true; 
+      }
+    responseArea.value += data+ '\n';
+})
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const videoElement = document.getElementById('cameraStream');
+  const activateButton = document.getElementById('activateButton');
+  const deactivateButton = document.getElementById('deactivateButton');
+  let videoStream = null;
+
+  // Function to activate the camera
+  function activateCamera() {
+    // Request access to the camera
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        videoStream = stream;
+        // Attach the camera stream to the video element
+        videoElement.srcObject = stream;
+      })
+      .catch(error => {
+        console.error('Error accessing camera:', error);
+        alert('Error accessing camera');
+      });
+  }
+
+  // Function to deactivate the camera
+  function deactivateCamera() {
+    if (videoStream) {
+      videoStream.getTracks()[0].stop();
+      videoStream = null;
+      videoElement.srcObject = null;
+    }
+  }
+
+  // Activate button click event
+  activateButton.addEventListener('click', () => {
+    activateCamera();
+  });
+
+  // Deactivate button click event
+  deactivateButton.addEventListener('click', () => {
+    deactivateCamera();
+  });
+ 
+});
+	</script>
+</body>

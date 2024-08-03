@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Centered Button</title>
+	<style>
+		button {
+			display: block;
+			margin: 0 auto;
+		}
+.button {
+  display: inline-block;
+  padding: 20px;
+  display: block;
+  margin: 0 auto;
+  border: solid;
+  border-radius: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color:rgb(22, 56, 45);
+  color: #FFFFFF;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+	</style>
+</head>
+<body>
+	<button id="obstacle" class="button">Detecter Obstacle</button>
+  <br>
+  <h2>response of server</h2>
+  <textarea  id="responseArea" cols="40" rows="15"></textarea>
+  </div>
+</body>
+<script>
+		
+		const socket = new WebSocket(`ws://${window.location.hostname}:8080`);
+    const socketr = new WebSocket(`ws://${window.location.hostname}:8081`);
+	 let waitForEndService = false;// flaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaag
+	   let intervalId;
+
+		document.getElementById('obstacle').addEventListener('click', () => {
+			socket.send('o');
+		})
+    
+    responseArea=document.getElementById('responseArea')
+    socketr.addEventListener('message', function (event) {
+    const data = event.data;
+    console.log( data);
+    if (data==="target reached")
+    {
+    waitForEndService = true;
+    console.log(waitForEndService);
+    clearInterval(intervalId)
+    }
+     if(data==="end of service"){
+    waitForEndService = false;
+     linefollower();
+    }
+    if (data === "line follower") {
+    
+      console.log("linef");
+    linefollower();
+    }
+   
+ 
+    
+    
+     // socketr.send(JSON.stringify( generateRandomVector() ))
+    responseArea.value += data+ '\n';
+})
+function linefollower(){
+  // if(!waitForEndService){
+       clearInterval(intervalId);
+      intervalId = setInterval(() => {
+      socketr.send( generateRandomnumber() ); // Sending an empty message to socketr
+    }, 1000);//}
+    }
+
+function generateRandomnumber() {
+   const randomNumber = Math.floor(Math.random() * 16);
+
+  return randomNumber;
+}
+
+
+
+
+
+        
+        </script>
+</html>

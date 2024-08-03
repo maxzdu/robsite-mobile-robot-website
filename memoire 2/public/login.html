@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login system with nodejs and mysql database</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <section class="box">
+        <div class="design">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="form">
+            <h2>User Login</h2>
+            <form action="/login" method="POST">
+                <input type="email" name="email" class="input-field" placeholder="Professional email" />
+                <input type="password" name="password" class="input-field" placeholder="Password" />
+                <input type="submit" class="btn" value="LOGIN">
+            </form>
+            <button onclick="window.location.href='/signup'" class="btn">SIGNUP</button>
+        </div>
+    </section>
+</body>
+</html>

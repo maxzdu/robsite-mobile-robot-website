@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<header style="background-color: #333; color: #fff; display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+  <div style="display: flex; align-items: center;">
+    <img src="https://dummyimage.com/50x50/000/fff" alt="Logo" style="margin-right: 10px;">
+    <h1 style="margin: 0;">My Website</h1>
+  </div>
+  <nav>
+    <ul style="display: flex; list-style: none; margin: 0; padding: 0;">
+      <li style="margin-right: 10px;"><a href="#" style="color: #fff; text-decoration: none;">Home</a></li>
+      <li style="margin-right: 10px;"><a href="#" style="color: #fff; text-decoration: none;">Dashboard</a></li>
+      <li><a href="#" style="color: #fff; text-decoration: none;">Logout</a></li>
+    </ul>
+  </nav>
+</header>
+
+<head>
+	<title>Robotic Vehicle Control Panel</title>
+	<style>
+		body {
+  background-color: #F5F5F5;
+   background-image: url("");
+  margin: 0;
+  padding: 0;
+}
+element.style {
+    margin-top: 10px;
+  }
+input{
+  font-size: 1.2em;
+  padding: 10px;
+  display: inline-block;
+   text-align: center;
+  font-weight: bold;
+   transition: background-color 0.3s ease;
+}
+label{
+  text-align: center;
+  margin-left: 35%;
+
+}
+h2{
+  text-align: center
+}
+.up-down-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  padding-top: 50px;
+}
+
+.left-right-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding-top: 50px;
+  width: 500px;
+
+}
+
+.button {
+  display: inline-block;
+  padding: 20px;
+  margin: 10px;
+  border: solid;
+  border-radius: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color:rgb(22, 56, 45);
+  color: #FFFFFF;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.button:hover {
+  background-color: #5e1818;
+}
+
+.button:active {
+  background-color: #292929;
+}
+.float-container{
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+}
+.container{
+  margin-top: 50%;
+  padding-top: 10px;
+}
+
+.container1{
+position: relative;
+top: 0%;
+float: right;
+justify-content: center;
+  align-items: center;
+}
+.config-style{
+  border-radius: 10px;
+  border-style:solid;
+  border-color: #292929;
+  float: left;
+  margin-bottom: 50%;
+}
+#forward {
+  background-color: #7A7A7A;
+}
+
+#backward {
+  background-color: #7A7A7A;
+}
+a{
+  padding: 10px;
+  background-color: #292929;
+  color: #F5F5F5;
+  text-decoration: none;
+}
+
+#left {
+  background-color: #7A7A7A;
+}
+
+#right {
+  background-color: #7A7A7A;
+}
+
+#forward:before {
+  content: "▲";
+  display: block;
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+#backward:before {
+  content: "▼";
+  display: block;
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+#left:before {
+  content: "◀";
+  display: block;
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+#right:before {
+  content: "▶";
+  display: block;
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+#form{
+position :relative;
+}
+#valider{
+  margin-left: 35%;
+  margin-right: 50%;
+}
+#circle {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background-color: rgb(6, 100, 22);
+        margin-left: auto;
+        margin-right: auto;
+        border: #080808;
+        border-style: groove;
+      }
+      #videoContainer {
+      width: 380px;
+      height: 360px;
+      background-color:#080808;
+    }
+
+</style>
+
+
+</head>
+<body>
+<div class="float-container">
+  <div class="config-style">
+    <h2>settings </h2>
+    
+    <label for="speed" id="speed-label"><b>Speed Of  Engine</b> </label>
+    </br>
+    <button class="button button--addOnLeft" id="decrease-speed" >-</button>
+      <input  id="speed" name="vitess du moteur" value="100" min="0" oninput="getval()">
+      <button class="button button--addOnRight"id="increase-speed" >+</button>
+      </br>
+      <label for="distance" id="distance-label"><b>Distance Of Obstacles</b></label>    
+  </br>
+      <button class="button button--addOnLeft" id="decrease-distance">-</button>
+      <input id="distance" name="distance des obstacle" value="100" min="0" oninput="getval()">
+      <button class="button button--addOnRight" id="increase-distance">+</button>
+    </br>
+    <label for="distance" id="timing-label"><b>Timing</b></label>  
+  </br>
+    <button class="button button--addOnLeft" id="decrease-timing">-</button>
+    <input id="timing" name="distance des obstacle" value="100" min="0" oninput="getval()">
+    <button class="button button--addOnRight" id="increase-timing">+</button>
+  </br>
+      <button id="valider"  class="button" >valider</button>
+      <button id="cnct" class="button">Connect To Robot</button>
+      <button id="dc" class="button">disable the client</button>
+  
+    </div>
+<div>
+  <div id="circle"></div>
+  <div class="up-down-container">
+    <button id="forward" class="button"></button>
+  </div>
+  <div class="left-right-container">
+    <button id="left" class="button"></button>
+    <button id="stop" class="button">STOP</button>
+    <button id="right" class="button"></button>
+  </div>
+  <div class="up-down-container">
+    <button id="backward" class="button"></button>
+  </div>
+</div>
+  <div class="container1">
+    <div id="videoContainer">
+    <h2>camera</h2>
+  	  <video  id="cameraStream" autoplay ></video>
+    </div>
+    <br>
+    <button class="button"id="activateButton">Activate Camera</button>
+    <button class="button"id="deactivateButton">Deactivate Camera</button>
+ <div>
+  <h2>response of server</h2>
+  <textarea  id="responseArea" cols="40" rows="15"></textarea>
+  </div>
+  
+  </div>
+
+ 
+</div>
+  
+	<script>
+		const socket = new WebSocket(`ws://${window.location.hostname}:8080`);
+		document.getElementById('forward').addEventListener('click', () => {
+			socket.send('f');
+		});
+        document.getElementById('backward').addEventListener('click', () => {
+			socket.send('b');
+		});
+		document.getElementById('left').addEventListener('click', () => {
+			socket.send('l');
+		});
+		document.getElementById('right').addEventListener('click', () => {
+			socket.send('r');
+		});
+		document.getElementById('stop').addEventListener('click', () => {
+			socket.send('s');
+		});
+    document.getElementById('cnct').addEventListener('click',() => {
+			socket.send('c');
+		});
+    document.getElementById('dc').addEventListener('click',() => {
+			socket.send('disable the client');
+		});
+const speedInput = document.getElementById("speed");
+const increaseButton = document.getElementById("increase-speed");
+const decreaseButton = document.getElementById("decrease-speed");
+increaseButton.addEventListener("click", () => {
+  if(speedInput.value < 255){
+  let newSpeed = parseInt(speedInput.value) + 1;
+  speedInput.value = newSpeed;
+  getval();}else{
+    alert("max value is 255")
+  }
+});
+
+decreaseButton.addEventListener("click", () => {
+  if(speedInput.value > 1){
+  let newSpeed = parseInt(speedInput.value) - 1;
+  speedInput.value = newSpeed;
+  getval();}else{alert("value should not be less than 1")}
+});
+const distanceInput = document.getElementById("distance");
+const increaseButtond = document.getElementById("increase-distance");
+const decreaseButtond = document.getElementById("decrease-distance");
+increaseButtond.addEventListener("click", () => {
+  let newdistance = parseInt(distanceInput.value) + 1;
+  distanceInput.value = newdistance;
+  getval();
+});
+decreaseButtond.addEventListener("click", () => {
+  if(distanceInput.value > 1){
+  let newdistance = parseInt(distanceInput.value) - 1; 
+  distanceInput.value = newdistance;
+  getval();}else{alert("value should not be less than 1")}
+});
+const timingInput = document.getElementById("timing");
+const increaseButtont = document.getElementById("increase-timing");
+const decreaseButtont = document.getElementById("decrease-timing");
+increaseButtont.addEventListener("click", () => {
+  let newtiming = parseInt(timingInput.value) + 1;
+  timingInput.value = newtiming;
+  getval();
+});
+decreaseButtont.addEventListener("click", () => {
+  if(timingInput.value > 1){
+  let newttmng = parseInt(timingInput.value) - 1; 
+  timingInput.value = newtiming;
+  getval();}else{alert("value should not be less than 1")}
+});
+  function getval(){
+   val1 = document.getElementById('speed').value;
+   val2 = document.getElementById('distance').value;
+   val3 = document.getElementById('timing').value;
+  }
+ 
+    document.getElementById('valider').addEventListener('click', () => {
+			socket.send("vitess du moyeur "+val1);
+      socket.send("distance des obstacles "+val2);
+      socket.send("timing "+val3);})
+      const circle = document.getElementById("circle");
+
+      socket.addEventListener('message', function (event) {
+    const data = event.data;
+    console.log( data);
+    if (data === "o") {
+        circle.style.backgroundColor = "red";
+      }
+    responseArea.value += data+ '\n';
+})
+document.addEventListener('DOMContentLoaded', () => {
+  const videoElement = document.getElementById('cameraStream');
+  const activateButton = document.getElementById('activateButton');
+  const deactivateButton = document.getElementById('deactivateButton');
+  let videoStream = null;
+
+  // Function to activate the camera
+  function activateCamera() {
+    // Request access to the camera
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        videoStream = stream;
+        // Attach the camera stream to the video element
+        videoElement.srcObject = stream;
+      })
+      .catch(error => {
+        console.error('Error accessing camera:', error);
+        alert('Error accessing camera');
+      });
+  }
+
+  // Function to deactivate the camera
+  function deactivateCamera() {
+    if (videoStream) {
+      videoStream.getTracks()[0].stop();
+      videoStream = null;
+      videoElement.srcObject = null;
+    }
+  }
+
+  // Activate button click event
+  activateButton.addEventListener('click', () => {
+    activateCamera();
+  });
+
+  // Deactivate button click event
+  deactivateButton.addEventListener('click', () => {
+    deactivateCamera();
+  });
+});
+
+	</script>
+
+</body>
+<footer style="background-color: #333; color: #fff; padding: 20px; text-align: center;">
+  <p></p>
+</footer>
+

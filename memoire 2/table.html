@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Robotic Vehicle Control Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="assets/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/all.min.css">
+    <link rel="stylesheet" href="assets/main.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="operateur.html">ROSDS</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                        <li class="nav-item">
+                            <a class="nav-link" href="operateur.html#logs">Logs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="table.html">Demandes</a>
+                        </li>
+
+                    </ul>
+                    <form class="d-flex" role="search">
+                        <button class="btn btn-danger">logout <i class="fas fa-arrow-right mx-1"></i></button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+        <br>
+        <h1 class="text-center">Demandes</h1>
+        <br>
+
+
+        <div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">User Name</th>
+                            <th scope="col">Room number</th>
+                            <th scope="col">Service</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <th>29/05/2023 23:00</th>
+                            <td>Cheikh boukal Oauil</td>
+                            <td>10</td>
+                            <td>Ram paper</td>
+                            <td><span class="badge badge-pill badge-sm bg-warning">waiting</span></td>
+                        </tr>
+
+                        <tr>
+                            <th>30/05/2023 23:00</th>
+                            <td>Jacob Thornton</td>
+                            <td>31</td>
+                            <td>Blue pen</td>
+                            <td><span class="badge badge-pill badge-sm bg-secondary">ongoing</span></td>
+                        </tr>
+
+                        <tr>
+                            <th>31/05/2023 23:00</th>
+                            <td>Larry the Bird</td>
+                            <td>12</td>
+                            <td>Red pen</td>
+                            <td><span class="badge badge-pill badge-sm bg-success">done</span></td>
+                        </tr>
+
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    </div>
+
+
+
+    <script src="assets/bootstrap.bundle.min.js"></script>
+    <script src="assets/popper.min.js"></script>
+    <script src="assets/bootstrap.min.js"></script>
+
+
+    <script>
+        const socket = new WebSocket(`ws://${window.location.hostname}:8080`);
+        document.getElementById('forward').addEventListener('click', () => {
+            socket.send('f');
+        });
+        document.getElementById('backward').addEventListener('click', () => {
+            socket.send('b');
+        });
+        document.getElementById('left').addEventListener('click', () => {
+            socket.send('l');
+        });
+        document.getElementById('right').addEventListener('click', () => {
+            socket.send('r');
+        });
+        document.getElementById('stop').addEventListener('click', () => {
+            socket.send('s');
+        });
+        document.getElementById('cnct').addEventListener('click', () => {
+            socket.send('c');
+        });
+        document.getElementById('dc').addEventListener('click', () => {
+            socket.send('disable the client');
+        });
+        const speedInput = document.getElementById("speed");
+        const increaseButton = document.getElementById("increase-speed");
+        const decreaseButton = document.getElementById("decrease-speed");
+        increaseButton.addEventListener("click", () => {
+            if (speedInput.value < 255) {
+                let newSpeed = parseInt(speedInput.value) + 1;
+                speedInput.value = newSpeed;
+                getval();
+            } else {
+                alert("max value is 255")
+            }
+        });
+
+        decreaseButton.addEventListener("click", () => {
+            if (speedInput.value > 1) {
+                let newSpeed = parseInt(speedInput.value) - 1;
+                speedInput.value = newSpeed;
+                getval();
+            } else { alert("value should not be less than 1") }
+        });
+        const distanceInput = document.getElementById("distance");
+        const increaseButtond = document.getElementById("increase-distance");
+        const decreaseButtond = document.getElementById("decrease-distance");
+        increaseButtond.addEventListener("click", () => {
+            let newdistance = parseInt(distanceInput.value) + 1;
+            distanceInput.value = newdistance;
+            getval();
+        });
+        decreaseButtond.addEventListener("click", () => {
+            if (distanceInput.value > 1) {
+                let newdistance = parseInt(distanceInput.value) - 1;
+                distanceInput.value = newdistance;
+                getval();
+            } else { alert("value should not be less than 1") }
+        });
+        const timingInput = document.getElementById("timing");
+        const increaseButtont = document.getElementById("increase-timing");
+        const decreaseButtont = document.getElementById("decrease-timing");
+        increaseButtont.addEventListener("click", () => {
+            let newtiming = parseInt(timingInput.value) + 1;
+            timingInput.value = newtiming;
+            getval();
+        });
+        decreaseButtont.addEventListener("click", () => {
+            if (timingInput.value > 1) {
+                let newttmng = parseInt(timingInput.value) - 1;
+                timingInput.value = newtiming;
+                getval();
+            } else { alert("value should not be less than 1") }
+        });
+        function getval() {
+            val1 = document.getElementById('speed').value;
+            val2 = document.getElementById('distance').value;
+            val3 = document.getElementById('timing').value;
+        }
+
+        document.getElementById('valider').addEventListener('click', () => {
+            socket.send("vitess du moyeur " + val1);
+            socket.send("distance des obstacles " + val2);
+            socket.send("timing " + val3);
+        })
+        const circle = document.getElementById("circle");
+        const responseArea = document.getElementById("respondArea");
+        socket.addEventListener('message', function (event) {
+            const data = event.data;
+            const timestamp = new Date().toLocaleTimeString();
+            console.log(data);
+            if (data === "o") {
+                circle.style.backgroundColor = "red";
+            }
+            responseArea.innerHTML += `<p><span class="timestamp">[${timestamp}]</span> ${data}</p>`;
+        })
+        document.addEventListener('DOMContentLoaded', () => {
+            const videoElement = document.getElementById('cameraStream');
+            const activateButton = document.getElementById('activateButton');
+            const deactivateButton = document.getElementById('deactivateButton');
+            let videoStream = null;
+
+            // Function to activate the camera
+            function activateCamera() {
+                // Request access to the camera
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        videoStream = stream;
+                        // Attach the camera stream to the video element
+                        videoElement.srcObject = stream;
+                    })
+                    .catch(error => {
+                        console.error('Error accessing camera:', error);
+                        alert('Error accessing camera');
+                    });
+            }
+
+            // Function to deactivate the camera
+            function deactivateCamera() {
+                if (videoStream) {
+                    videoStream.getTracks()[0].stop();
+                    videoStream = null;
+                    videoElement.srcObject = null;
+                }
+            }
+
+            // Activate button click event
+            activateButton.addEventListener('click', () => {
+                activateCamera();
+            });
+
+            // Deactivate button click event
+            deactivateButton.addEventListener('click', () => {
+                deactivateCamera();
+            });
+        });
+
+    </script>
+</body>

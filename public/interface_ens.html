@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Robotic Vehicle Control Panel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link href="assets/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/all.min.css">
+  <link rel="stylesheet" href="assets/main.css">
+</head>
+
+<body style="background-image: url('background.jpg'); background-size: cover; background-repeat: no-repeat;">
+  <div class="container">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <img src="logo.png" href="operator.html" width="168" height="33">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+            <li class="nav-item">
+              <a class="nav-link ms-5" href="operateur.html#logs" style="color:white">Logs</a>
+            </li>
+
+          </ul>
+          <form class="d-flex" role="search"action="/logout" method="POST">
+            <button class="btn transparent text-white">logout <i class="fas fa-arrow-right mx-1"></i></button>
+          </form>
+        </div>
+      </div>
+    </nav>
+    <div class="d-flex justify-content-between mt-2 ">
+      <div class="flex-1 w-100 p-2">
+        <h2></h2>
+        <div class="d-flex justify-content-between mt-2">
+          <div class="row">
+            <div class="col-12 pt-3">
+              <h5>Connection status</h5>
+              <h6 class="text-success">Connected</h6>
+              <h5 class="mt-3">Robot address</h5>
+              <h6 class="text-purple">http://127.0.0.1:8000</h6>
+              <br><br><br><br><br><br>
+              <div class="col-12 pt-3  ">
+                <h5 class="mt-2">Navigation modes</h5>
+                <button id="lf" class="btn btn-success mt-2" > Line follower</button>
+                <button id="gm" class="mt-2 btn btn-success "  > GPS </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="flex-1 w-100">
+        <div class="row">
+          <div class="col">
+            <div class="card" style="background: transparent; border: none;">
+              <div class="card-body">
+                <div class="col">
+                 
+                <h5 class="row  card-title text-center text-white justify-content-center" style=" width: 100%;
+                height: auto;
+                max-height: 100%;
+                object-fit: contain;"style="color:white"> <div id="circle"></div> Camera Stream</h5>
+                
+                </div>
+                <div style=" max-width: 100%;
+                max-height: 100%;
+                overflow: hidden;" class="video-container bg-dark rounded">
+                  <video style="  
+                  width: 100%;
+                  height: 100%;
+                  max-width: 100%;
+                  max-height: 400px;
+                  object-fit: contain;" id="cameraStream" autoplay></video>
+                </div>
+                <div class="mt-1 d-flex justify-content-between">
+                  <button class="button btn btn-success" id="activateButton">Activate Camera</button>
+                  <button class="button btn btn-danger" id="deactivateButton">Deactivate Camera</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <hr>
+    <div class="d-flex mx-2 flex-row justify-content-between">
+      <div class="w-50">
+        <div class="mt-1 d-flex">
+          <select oninput="getval()" id="salle_n" class="form-select form-select-sm" aria-label=".form-select-sm example">
+           <option value=""> Select a room</option>
+   <option value="11">11</option>
+   <option value="11">Schooling</option>
+   <option value="10">10</option>
+   <option value="9">9</option>
+          </select>
+          <select oninput="getval()" id="service" class="form-select form-select-sm" aria-label=".form-select-sm example">
+          <option value="">Select a tool</option>
+   <option value="Marker">Marker</option>
+   <option value="Blue cartridge">Blue cartridge</option>
+   <option value="Green cartridge">Green cartridge</option>
+   <option value="Power strip">Power strip</option>
+   <option value="Paper RAM">Paper RAM </option>
+          </select>
+         </div>
+        <div class="d-flex">
+          <button class="mt-2 btn btn-block equal-button btn-success text-white" id="rs"> Request service</button>
+        </div>
+        <br>
+        <div class="d-flex">
+          <button class="btn btn-danger  equal-button" id="otb"> Open box</button>
+        </div>
+        <br>
+        <div class="d-flex">
+          <button class="btn btn-danger  equal-button" id="end"> End Service</button>
+        </div>
+      </div>
+      <div class="w-50 d-flex justify-content-center">
+        <div class="border border-5 rounded-circle d-flex justify-content-center align-items-center"
+          style="width: 220px;height: 220px;background: #ebe3e359;">
+          <div>
+            <div class="up-down-container d-flex justify-content-center">
+              <button id="forward" class="button btn btn-light btn-lg rounded-circle m-1"><i
+                  class="fa fa-arrow-up"></i></button>
+            </div>
+            <div class="left-right-container">
+              <button id="left" class="button btn btn-light btn-lg rounded-circle m-1"><i
+                  class="fa fa-arrow-left"></i></button>
+              <button id="stop" class="button btn btn-danger ">STOP</button>
+              <button id="right" class="button btn btn-light btn-lg rounded-circle m-1"><i
+                  class="fa fa-arrow-right"></i></button>
+            </div>
+            <div class="up-down-container d-flex justify-content-center">
+              <button id="backward" class="button btn btn-light btn-lg rounded-circle m-1"><i
+                  class="fa fa-arrow-down"></i></button>
+            </div>
+             
+          </div>
+         
+        </div>
+      
+          
+      </div>
+    </div>
+    <hr>
+    <div id="logs" class="d-flex flex-row">
+      <div class="w-100">
+        <div class="row">
+          <div class="col">
+            <div class="card" style="background: transparent;border: none;">
+              <div class="card-body m-0 p-0">
+                <div class="card-text scrollable-div"
+                  style="min-height: 200px;max-height: 200px;overflow-y: scroll;border-radius: 10px;font-size: 10px;">
+                  <div id="respondArea" class="card-text terminal-logs p-2 m-0"
+                    style="background-color: black;color: greenyellow;">
+                    <p><span class="timestamp">[09:00:01]</span> Welcome to Robosite!</p>
+                    <p><span class="timestamp">[09:00:01]</span> this is the server log
+                    <p>
+                    <p><span class="timestamp">[09:00:01]</span> everything from the server will be shown here
+                    <p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+   
+   
+
+
+  <script src="assets/bootstrap.bundle.min.js"></script>
+  <script src="assets/popper.min.js"></script>
+  <script src="assets/bootstrap.min.js"></script>
+  <script>
+    const socket = new WebSocket(`ws://${window.location.hostname}:8080`);
+  let lineFollowerActive = false;
+  let gpsModeActive = false;
+    document.getElementById('forward').addEventListener('click', () => {
+      socket.send('f');
+    });
+    document.getElementById('backward').addEventListener('click', () => {
+      socket.send('b');
+    });
+    document.getElementById('left').addEventListener('click', () => {
+      socket.send('l');
+    });
+    document.getElementById('right').addEventListener('click', () => {
+      socket.send('r');
+    });
+    document.getElementById('stop').addEventListener('click', () => {
+      socket.send('s');
+    });
+    document.getElementById('otb').addEventListener('click', () => {
+      socket.send('open the box ');
+    });
+    document.getElementById('end').addEventListener('click', () => {
+      socket.send('end of service');
+      document.getElementById('otb').disabled = true;
+      document.getElementById('end').disabled = true;
+    });
+   document.getElementById('lf').addEventListener('click', () => {
+    if (!gpsModeActive) {
+      if (lineFollowerActive) {
+        socket.send('stop line follower');
+        lineFollowerActive = false;
+      } else {
+        socket.send('start line follower');
+        lineFollowerActive = true;
+      }
+    }
+  });
+   document.getElementById('gm').addEventListener('click', () => {
+    if (!lineFollowerActive) {
+      if (gpsModeActive) {
+        socket.send('stop GPS mode');
+        gpsModeActive = false;
+      } else {
+        socket.send('start GPS mode');
+        gpsModeActive = true;
+      }
+    }
+  });
+    function getval() {
+      val = document.getElementById('salle_n').value.trim();
+       val = document.getElementById('service').value.trim();
+
+    }
+    document.getElementById('otb').disabled = true;
+    document.getElementById('end').disabled = true;
+    var rs = document.getElementById('rs');
+    var inputArea = document.getElementById('salle_n')
+    inputArea.addEventListener('input', function () {
+      var val = inputArea.value.trim();
+      if (val === '') {
+        rs.disabled = true;
+
+      } else {
+        rs.disabled = false;
+      }
+    });
+    rs.onclick = function () {
+      var valu = document.getElementById('salle_n').value.trim();
+      var valu1 = document.getElementById('service').value.trim();
+      if (valu !== "") {
+const timestamp = new Date().toLocaleTimeString();
+const message = {
+      type: 'request',
+      roomNumber: valu,
+      service:valu1,
+      timestamp: timestamp,
+      username: ''
+    };
+        socket.send(JSON.stringify(message));
+console.log(typeof message);
+        document.getElementById('otb').disabled = false;
+        document.getElementById('end').disabled = false;
+      } else {
+
+        alert("Enter The Room's Number");
+      }
+    }
+
+    const responseArea = document.getElementById("respondArea");
+    socket.addEventListener('message', function (event) {
+      const data = event.data;
+      const timestamp = new Date().toLocaleTimeString();
+      console.log(data);
+      if (data === "o") {
+        circle.style.backgroundColor = "red";
+      } if (data == "disable the client") {
+        document.getElementById('forward').disabled = true;
+        document.getElementById('backward').disabled = true;
+        document.getElementById('left').disabled = true;
+        document.getElementById('right').disabled = true;
+        document.getElementById('stop').disabled = true;
+        document.getElementById('rs').disabled = true;
+        document.getElementById('otb').disabled = true;
+        document.getElementById('end').disabled = true;
+         document.getElementById('lf').disabled = true;
+      }if(data==="the robot has arrived"){
+       alert("The robot has arrived");
+      }
+      responseArea.innerHTML += `<p><span class="timestamp">[${timestamp}]</span> ${data}</p>`;
+    })
+    document.addEventListener('DOMContentLoaded', () => {
+      const videoElement = document.getElementById('cameraStream');
+      const activateButton = document.getElementById('activateButton');
+      const deactivateButton = document.getElementById('deactivateButton');
+      let videoStream = null;
+
+      // Function to activate the camera
+      function activateCamera() {
+        // Request access to the camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then(stream => {
+            videoStream = stream;
+            // Attach the camera stream to the video element
+            videoElement.srcObject = stream;
+          })
+          .catch(error => {
+            console.error('Error accessing camera:', error);
+            alert('Error accessing camera');
+          });
+      }
+
+      // Function to deactivate the camera
+      function deactivateCamera() {
+        if (videoStream) {
+          videoStream.getTracks()[0].stop();
+          videoStream = null;
+          videoElement.srcObject = null;
+        }
+      }
+
+      // Activate button click event
+      activateButton.addEventListener('click', () => {
+        activateCamera();
+      });
+
+      // Deactivate button click event
+      deactivateButton.addEventListener('click', () => {
+        deactivateCamera();
+      });
+    });
+  </script>
+</body>

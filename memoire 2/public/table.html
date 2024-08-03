@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Robotic Vehicle Control Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="assets/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/all.min.css">
+    <link rel="stylesheet" href="assets/main.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <img src="logo.png" width="150" height="25" href="operator.html">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+            <li class="nav-item">
+              <a class="nav-link ms-3" href="operateur.html#logs" style="color:white">Logs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="table.html" style="color:white">Demandes</a>
+            </li>
+
+          </ul>
+          <form class="d-flex" role="search"action="/logout" method="POST">
+            <button class="btn btn-danger">logout <i class="fas fa-arrow-right mx-1"></i></button>
+          </form>
+        </div>
+      </div>
+    </nav>
+        <br>
+        <h1 class="text-center">Demandes</h1>
+        <br>
+
+
+        <div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">User Name</th>
+                            <th scope="col">Room </th>
+                            <th scope="col">Service</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+
+                        <tr>
+                            <th>29/05/2023 23:00</th>
+                            <td>Cheikh boukal Oauil</td>
+                            <td>10</td>
+                            <td>Ram paper</td>
+                            <td><span class="badge badge-pill badge-sm bg-warning">waiting</span></td>
+                        </tr>
+
+                        <tr>
+                            <th>30/05/2023 23:00</th>
+                            <td>Jacob Thornton</td>
+                            <td>31</td>
+                            <td>Blue pen</td>
+                            <td><span class="badge badge-pill badge-sm bg-secondary">ongoing</span></td>
+                        </tr>
+
+                        <tr>
+                            <th>31/05/2023 23:00</th>
+                            <td>Larry the Bird</td>
+                            <td>12</td>
+                            <td>Red pen</td>
+                            <td><span class="badge badge-pill badge-sm bg-success">done</span></td>
+                        </tr>
+
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    </div>
+
+
+
+    <script src="assets/bootstrap.bundle.min.js"></script>
+    <script src="assets/popper.min.js"></script>
+    <script src="assets/bootstrap.min.js"></script>
+
+
+    <script>
+        const socket = new WebSocket(`ws://${window.location.hostname}:8080`);
+        
+
+       
+     
+        const responseArea = document.getElementById("respondArea");
+        socket.addEventListener('message', function (event) {
+            const data = event.data;
+                const messager = JSON.parse(event);
+if (typeof messager === 'object' && messager.type ==='request') {
+  console.log('Received an object');
+  console.log('Type:', messager.type);
+   console.log('Type:', messager.timestamp);
+  console.log('Username:', messager.username);
+  console.log('Room Number:', messager.roomNumber);
+   ws.send(JSON.stringify(messager));
+}
+            const timestamp = new Date().toLocaleTimeString();
+            console.log(data);
+            if (data === "o") {
+                circle.style.backgroundColor = "red";
+            }
+            responseArea.innerHTML += `<p><span class="timestamp">[${timestamp}]</span> ${data}</p>`;
+        })
+        function fetchServices() {
+    fetch("/services")
+      .then((response) => response.json())
+      .then((data) => {
+        const tableBody = document.getElementById("tableBody");
+        tableBody.innerHTML = "";
+
+        data.forEach((service) => {
+          const row = document.createElement("tr");
+          if (service.status==="waiting"){
+          row.innerHTML = `
+            <th>${service.Date}</th>
+            <td>${service.username}</td>
+            <td>${service.roomnumber}</td>
+            <td>${service.service}</td>
+            <td><span class="badge badge-pill badge-sm bg-warning">${service.status}</span></td>
+          `;}
+            if (service.status==="ongoing"){
+          row.innerHTML = `
+            <th>${service.Date}</th>
+            <td>${service.username}</td>
+            <td>${service.roomnumber}</td>
+            <td>${service.service}</td>
+            <td><span class="badge badge-pill badge-sm bg-secondary">${service.status}</span></td>
+          `;}
+            if (service.status==="done"){
+          row.innerHTML = `
+            <th>${service.Date}</th>
+            <td>${service.username}</td>
+            <td>${service.roomnumber}</td>
+            <td>${service.service}</td>
+            <td><span class="badge badge-pill badge-sm bg-success">${service.status}</span></td>
+          `;}
+          tableBody.appendChild(row);
+        });
+      })
+      .catch((error) => console.error(error));
+  }
+
+  // Call the fetchServices function when the page is loaded
+  document.addEventListener("DOMContentLoaded", fetchServices);
+     
+
+          
+
+    </script>
+</body>

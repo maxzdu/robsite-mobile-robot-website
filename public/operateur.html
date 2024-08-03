@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Robotic Vehicle Control Panel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link href="assets/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/all.min.css">
+  <link rel="stylesheet" href="assets/main.css">
+  <script src="https:ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body style="background-image: url('background.jpg'); background-size: cover; background-repeat: no-repeat;">
+  <div class="container">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <img src="logo.png" href="operator.html" width="168" height="33">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+            <li class="nav-item">
+              <a class="nav-link ms-5" href="operateur.html#logs" style="color:white">Logs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/table" style="color:white">Demandes</a>
+            </li>
+
+          </ul>
+          <form class="d-flex" role="search"action="/logout" method="POST">
+            <button class="btn transparent text-white">logout <i class="fas fa-arrow-right mx-1"></i></button>
+          </form>
+        </div>
+      </div>
+    </nav>
+    <div class="d-flex justify-content-between mt-2 ">
+      <div class="flex-1 w-100 p-2">
+        <h2></h2>
+        <div class="d-flex justify-content-between mt-2">
+          <div class="row">
+            <div class="col-12 pt-3">
+              <h5>Connection status</h5>
+              <h6 id="connection" class="text-danger">Disconnected</h6>
+              <h5 class="mt-3">Robot address</h5>
+              <h6 class="text-purple">http://127.0.0.1:8000</h6>
+              <button id="cnct" class="btn btn-success"onclick="toggleConnection()"> Connect</button>
+              <button id="dc" class="btn btn-purple text-white"> Disable client</button>
+              <h5 class="mt-3">Connectivity</h5>
+                <button id="Websocket" class="btn btn-success mt-2" > Websocket</button>
+                <button id="Bluetooth" class="mt-2 btn btn-success "  >Bluetooth </button>
+              <br><br><br><br>
+              <div class="col-12 pt-3  ">
+                <h5 class="mt-3">Navigation modes</h5>
+                <button id="lf" class="btn btn-success mt-2" > Line follower</button>
+                <button id="gm" class="mt-2 btn btn-success "  > GPS </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="flex-1 w-100">
+        <div class="row">
+          <div class="col">
+            <div class="card" style="background: transparent; border: none;">
+              <div class="card-body">
+                <div class="col">
+                 
+                <h5 class="row  card-title text-center text-white justify-content-center" style=" width: 100%;
+                height: auto;
+                max-height: 100%;
+                object-fit: contain;"style="color:white"> <div id="circle"></div> Camera Stream</h5>
+                
+                </div>
+                <div style=" max-width: 100%;
+                max-height: 100%;
+                overflow: hidden;" class="video-container bg-dark rounded">
+                  <img src=""  background-color="black" width="320" height="240" id="cameraStream" ></img>
+                  
+                </div>
+                <div class="mt-1 d-flex justify-content-between">
+                  <button class="button btn btn-success" id="activateButton">Activate Camera</button>
+                  <button class="button btn btn-danger" id="deactivateButton">Deactivate Camera</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <hr>
+    <div class="d-flex flex-row justify-content-between">
+      <div class="mt-2 w-50 d-flex justify-content-center">
+        <div class="w-50">
+          <label for="speed" id="speed-label">Speed of Engine (cm/ut)</label>
+          <div class="d-flex">
+            <button class="button button--addOnLeft btn btn-danger" id="decrease-speed">-</button>
+            <input class="form-control mx-2" id="speed" name="vitess du moteur" value="100" min="0" oninput="getval()">
+            <button class="button button--addOnRight btn btn-success" id="increase-speed">+</button>
+          </div>
+          <label for="distance" id="distance-label">Distance of Obstacles (cm)</label>
+          <div class="d-flex">
+            <button class="button button--addOnLeft btn btn-danger" id="decrease-distance">-</button>
+            <input class="form-control mx-2" id="distance" name="distance des obstacle" value="100" min="0" oninput="getval()">
+            <button class="button button--addOnRight btn btn-success" id="increase-distance">+</button>
+          </div>
+          <label for="timing" id="timing-label">Timing (ms)</label>
+          <div class="d-flex">
+            <button class="button button--addOnLeft btn btn-danger" id="decrease-timing">-</button>
+            <input class="form-control mx-2" id="timing" name="distance des obstacle" value="100" min="0" oninput="getval()">
+            <button class="button button--addOnRight btn btn-success" id="increase-timing">+</button>
+          </div>
+          <label for="rotationtime" id="r-label"><b>Rotation time</b></label>
+          <div class="d-flex">
+            <button class="button button--addOnLeft btn btn-dangert" id="decrease-rtime">-</button>
+            <input class="form-control mx-2" id="rotation-time" name="roation time" value="100" min="0"
+              oninput="getval()">
+            <button class="button button--addOnRight btn btn-success" id="increase-rtime">+</button>
+          </div>
+           <label for="distance" id="Rotation-speed"><b>Rotation speed</b></label>
+          <div class="d-flex">
+            <button class="button button--addOnLeft btn btn-danger" id="decrease-rs">-</button>
+            <input class="form-control mx-2" id="rotation-speed" name="rotation speed" value="100" min="0"
+              oninput="getval()">
+            <button class="button button--addOnRight btn btn-success" id="increase-rs">+</button>
+          </div>
+          <p class="mt-1 d-flex flex-row justify-content-center">
+            <button id="valider" class="btn btn-block equal-button btn-purple text-white">Validate</button>
+          </p>
+        </div>
+        <div class="ms-5">
+          <br>
+          <div class="d-flex">
+            <select oninput="getval()" id="salle_n" class="form-select form-select-sm" aria-label=".form-select-sm example">
+             <option value=""> Select a room</option>
+     <option value="11">11</option>
+     <option value="11">Schooling</option>
+     <option value="10">10</option>
+     <option value="9">9</option>
+            </select>
+            <select oninput="getval()" id="service" class="form-select form-select-sm" aria-label=".form-select-sm example">
+            <option value="">Select a tool</option>
+     <option value="Marker">Marker</option>
+     <option value="Blue cartridge">Blue cartridge</option>
+     <option value="Green cartridge">Green cartridge</option>
+     <option value="Power strip">Power strip</option>
+     <option value="Paper RAM">Paper RAM </option>
+            </select>
+           </div>
+          <div class="d-flex">
+            <button class="mt-2 btn btn-block equal-button btn-success text-white" id="rs"> Request service</button>
+          </div>
+          <br>
+          <div class="d-flex">
+            <button class="btn btn-danger  equal-button" id="otb"> Open box</button>
+          </div>
+          <br>
+          <div class="d-flex">
+            <button class="btn btn-danger  equal-button" id="end"> End Service</button>
+          </div>
+        </div>
+      </div>
+      <div class="mt-3 w-50 d-flex justify-content-center">
+        <div class="border border-5 rounded-circle d-flex justify-content-center align-items-center" style="width: 220px;height: 220px;background: #ebe3e359;">
+          <div>
+            <div class="up-down-container d-flex justify-content-center">
+              <button id="forward" class="button btn btn-light btn-lg rounded-circle m-1"><i class="fa fa-arrow-up"></i></button>
+            </div>
+            <div class="left-right-container">
+              <button id="left" class="button btn btn-light btn-lg rounded-circle m-1"><i class="fa fa-arrow-left"></i></button>
+              <button id="stop" class="button btn btn-danger ">STOP</button>
+              <button id="right" class="button btn btn-light btn-lg rounded-circle m-1"><i class="fa fa-arrow-right"></i></button>
+            </div>
+            <div class="up-down-container d-flex justify-content-center">
+              <button id="backward" class="button btn btn-light btn-lg rounded-circle m-1"><i class="fa fa-arrow-down"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div id="logs" class="d-flex flex-col">
+      <div class="w-100">
+        <div class="col">
+          <div class="row">
+            <div class="card" style="background: transparent;border: none;">
+              <div class="d-flex mx-2 flex-row justify-content-between">
+                <div class="card-text scrollable-div"
+                  style="width: 300px;min-height: 200px;max-height: 200px;overflow-y: scroll;border-radius: 10px;font-size: 10px;">
+                  <div id="respondArea" class="card-text terminal-logs p-2 m-0"
+                    style="background-color: black;color: greenyellow;">
+                    <p><span class="timestamp">[09:00:01]</span> Welcome to Robosite!</p>
+                    <p><span class="timestamp">[09:00:01]</span> this is the server log
+                    <p>
+                    <p><span class="timestamp">[09:00:01]</span> further server responses will be shown here
+                    <p>
+                  </div>
+                </div>
+                <div class="card-text scrollable-div"
+                  style="width: 300px;min-height: 200px;max-height: 200px;overflow-y: scroll;border-radius: 10px;font-size: 10px;">
+                  <div id="respondArea" class="card-text terminal-logs p-2 m-0"
+                    style="background-color: black;color: greenyellow;">
+                    <p><span class="timestamp">[09:00:01]</span> Welcome to Robosite!</p>
+                    <p><span class="timestamp">[09:00:01]</span> this is the obstacle detection log
+                    <p>
+                  </div>
+                </div>
+                <div class="card-text scrollable-div"
+                  style="width: 300px; min-height: 200px;max-height: 200px;overflow-y: scroll;border-radius: 10px;font-size: 10px;">
+                  <div id="respondArea" class="card-text terminal-logs p-2 m-0"
+                    style="background-color: black;color: greenyellow;">
+                    <p><span class="timestamp">[09:00:01]</span> Welcome to Robosite!</p>
+                    <p><span class="timestamp">[09:00:01]</span> this is the red radiation log
+                    <p>
+        
+                    <p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br><br>
+  </div>
+  </div>
+
+
+
+  <script src="assets/bootstrap.bundle.min.js"></script>
+  <script src="assets/popper.min.js"></script>
+  <script src="assets/bootstrap.min.js"></script>
+
+
+  <script>
+    const socket = new WebSocket(`ws://${window.location.hostname}:8080`);
+    document.getElementById('forward').addEventListener('click', () => {
+      socket.send('f');
+    });
+    document.getElementById('backward').addEventListener('click', () => {
+      socket.send('b');
+    });
+    document.getElementById('left').addEventListener('click', () => {
+      socket.send('l');
+    });
+    document.getElementById('right').addEventListener('click', () => {
+      socket.send('r');
+    });
+    document.getElementById('stop').addEventListener('click', () => {
+      socket.send('s');
+    });
+    document.getElementById('cnct').addEventListener('click', () => {
+    
+      socket.send('c');
+    });
+    document.getElementById('dc').addEventListener('click', () => {
+      socket.send('disable the client');
+    });
+    document.getElementById('Bluetooth').addEventListener('click', () => {
+      socket.send('Bluetooth');
+    });
+    document.getElementById('Websocket').addEventListener('click', () => {
+      socket.send('Websocket');
+    });
+    
+    let val1 ,val2,val3;
+    const speedInput = document.getElementById("speed");
+    const increaseButton = document.getElementById("increase-speed");
+    const decreaseButton = document.getElementById("decrease-speed");
+    increaseButton.addEventListener("click", () => {
+      if (speedInput.value < 255) {
+        let newSpeed = parseInt(speedInput.value) + 1;
+        speedInput.value = newSpeed;
+        getval();
+      } else {
+        alert("max value is 255")
+      }
+    });
+
+    decreaseButton.addEventListener("click", () => {
+      if (speedInput.value > 1) {
+        let newSpeed = parseInt(speedInput.value) - 1;
+        speedInput.value = newSpeed;
+        getval();
+      } else { alert("value should not be less than 1") }
+    });
+    const distanceInput = document.getElementById("distance");
+    const increaseButtond = document.getElementById("increase-distance");
+    const decreaseButtond = document.getElementById("decrease-distance");
+    increaseButtond.addEventListener("click", () => {
+      let newdistance = parseInt(distanceInput.value) + 1;
+      distanceInput.value = newdistance;
+      getval();
+    });
+    decreaseButtond.addEventListener("click", () => {
+      if (distanceInput.value > 1) {
+        let newdistance = parseInt(distanceInput.value) - 1;
+        distanceInput.value = newdistance;
+        getval();
+      } else { alert("value should not be less than 1") }
+    });
+    const timingInput = document.getElementById("timing");
+    const increaseButtont = document.getElementById("increase-timing");
+    const decreaseButtont = document.getElementById("decrease-timing");
+    increaseButtont.addEventListener("click", () => {
+      let newtiming = parseInt(timingInput.value) + 1;
+      timingInput.value = newtiming;
+      getval();
+    });
+    decreaseButtont.addEventListener("click", () => {
+      if (timingInput.value > 1) {
+        let newtiming = parseInt(timingInput.value) - 1;
+        timingInput.value = newtiming;
+        getval();
+      } else { alert("value should not be less than 1") }
+    });
+    const rtimingInput = document.getElementById("rotation-time");
+      const increaseButtontr = document.getElementById("increase-rtime");
+    const decreaseButtontr = document.getElementById("decrease-rtime");
+    increaseButtontr.addEventListener("click", () => {
+      let newrtiming = parseInt(rtimingInput.value) + 1;
+      rtimingInput.value = newrtiming;
+      getval();
+    });
+    decreaseButtontr.addEventListener("click", () => {
+      if (rtimingInput.value > 1) {
+        let newrtiming = parseInt(rtimingInput.value) - 1;
+        rtimingInput.value = newrtiming;
+        getval();
+      } else { alert("value should not be less than 1") }
+    });
+     const rsInput = document.getElementById("rotation-speed");
+      const increaseButtonrs = document.getElementById("increase-rs");
+    const decreaseButtonrs = document.getElementById("decrease-rs");
+    increaseButtonrs.addEventListener("click", () => {
+      let newrs = parseInt(rsInput.value) + 1;
+      rsInput.value = newrs;
+      getval();
+    });
+    decreaseButtonrs.addEventListener("click", () => {
+      if (rsInput.value > 1) {
+        let newrs = parseInt(rsInput.value) - 1;
+        rsInput.value = newrs;
+        getval();
+      } else { alert("value should not be less than 1") }
+    });
+    function getval() {
+      val1 = document.getElementById('speed').value;
+      val2 = document.getElementById('distance').value;
+      val3 = document.getElementById('timing').value;
+       val4 = document.getElementById('rotation-time').value;
+        val5 = document.getElementById('rotation-speed').value;
+    }
+
+    document.getElementById('valider').addEventListener('click', () => {
+      socket.send("speed " + val1);
+      socket.send("distance " + val2);
+      socket.send("timing " + val3);
+      socket.send("Rotation " + val4);
+      socket.send("check the obstacle detection log for configuration results");
+    })
+    const circle = document.getElementById("circle");
+    const responseArea = document.getElementById("respondArea");
+    const connection= document.getElementById("connection");
+    let status="disconnected";
+    const connectButton = document.getElementById("cnct");
+      var connectionStatus = document.getElementById("connection");
+    socket.addEventListener('message', function (event) {
+      const data = event.data;
+      const timestamp = new Date().toLocaleTimeString();
+      console.log(data);
+      if (data === "o") {
+        circle.style.backgroundColor = "red";
+      }
+      if(data==="connected"){
+status="connected";
+ connectButton.innerText = "Disconnect";
+    connectButton.classList.remove("btn-success");
+    connectButton.classList.add("btn-danger");
+    connectionStatus.innerText = "Connected";
+    connectionStatus.classList.remove("text-danger");
+    connectionStatus.classList.add("text-success");
+      }
+      responseArea.innerHTML += `<p><span class="timestamp">[${timestamp}]</span> ${data}</p>`;
+    })
+    document.addEventListener('DOMContentLoaded', () => {
+      const videoElement = document.getElementById('cameraStream');
+      const activateButton = document.getElementById('activateButton');
+      const deactivateButton = document.getElementById('deactivateButton');
+      let videoStream = null;
+
+      // Function to activate the camera
+      function activateCamera() {
+       $('#cameraStream').attr('src','http://192.168.196.102:81/stream')
+      }
+
+      // Function to deactivate the camera
+      function deactivateCamera() {
+          $('#cameraStream').attr('src','')
+      }
+
+
+      // Activate button click event
+      activateButton.addEventListener('click', () => {
+        activateCamera();
+      });
+
+      // Deactivate button click event
+      deactivateButton.addEventListener('click', () => {
+        deactivateCamera();
+      });
+    });
+    function toggleConnection() {
+  var connectButton = document.getElementById("cnct");
+  var connectionStatus = document.getElementById("connection");
+socket.send("c");
+  if (connectButton.innerText === "Connect" && status === "connected") {
+    connectButton.innerText = "Disconnect";
+    connectButton.classList.remove("btn-success");
+    connectButton.classList.add("btn-danger");
+    connectionStatus.innerText = "Connected";
+    connectionStatus.classList.remove("text-danger");
+    connectionStatus.classList.add("text-purple");
+  } else {
+    connectButton.innerText = "Connect";
+    connectButton.classList.remove("btn-danger");
+    connectButton.classList.add("btn-success");
+    connectionStatus.innerText = "Disconnected";
+    connectionStatus.classList.remove("text-success");
+    connectionStatus.classList.add("text-danger");
+     status = "disconnected";
+  }
+}
+
+  </script>
+</body>
